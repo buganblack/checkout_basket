@@ -12,30 +12,34 @@ div class="basket header"
         tr
           td = h @basket.item_name(item)
           td = h @basket.item_price(item)
-          td = h '%0.2f' % @basket.tax_rates(item).round(2)
-          td = h '%0.2f' % @basket.additional_rates(item, 0).round(2)
+          td = h @basket.tax_rates(item)
+          td = h @basket.additional_rates(item, 0)
       tr
         td
           h4 Sub Total
+          | (total price without tax)
         td colspan="3" class="text-center"
           h5 = @basket.sub_total
       tr
         td
           h4 VAT total
+          | (total vat of the order)
         td colspan="3" class="text-center"
           h5 = @basket.tax
       tr
         td
-          h4 Refund
-        td colspan="3" class="text-center"
-          h5 = @basket.total_refund
-      tr
-        td
-          h4 Discounts
-        td colspan="3" class="text-center"
-          h5 = @basket.discounts
-      tr
-        td
           h4 Grand Total
+          | total without discounts and off
         td colspan="3" class="text-center"
           h5 = @basket.grand_total
+      tr
+        td
+          h4 Vat Refund
+          | 12% off if grand total is > 70
+        td colspan="3" class="text-center"
+          h5 = @basket.v_refund
+      tr
+        td
+          h4 Expected Price
+        td colspan="3" class="text-center"
+          h5 = '%0.2f' % @basket.e_price.round(2)

@@ -29,7 +29,8 @@ class BasketService
       g_total: 0,
       s_total: 0,
       tax: 0,
-      discounts: 0
+      v_refund: 0,
+      e_price: 0
     }
   end
 
@@ -38,18 +39,20 @@ class BasketService
     basket.each do |item|
       item = item.to_i
       dc += 1 if item == 1
+      totals[:g_total] += additional_rates(item, 0)
       totals[:s_total] += ITEMS[item]
-      totals[:g_total] += additional_rates(item, dc)
+      totals[:e_price] += additional_rates(item, dc)
       totals[:tax] += tax_rates(item)
-      if dc == 2
-        dc = 0
-        totals[:discounts] += 1
-      end
+      dc = 0 if dc == 2
     end
-    totals[:g_total] = '%0.2f' % (vat_refund(totals[:g_total])).round(2)
+    totals[:v_refund] = totals[:e_price] > 70 ? '%0.2f' % vat_refund(totals[:e_price]).round(2) : "0.00"
+    totals[:e_price] = totals[:e_price] - vat_refund(totals[:e_price]) if totals[:e_price] > 70
     totals[:s_total] = '%0.2f' % totals[:s_total].round(2)
-    totals[:tax] = '%0.2f' % totals[:tax]
-    totals[:discounts] = totals[:discounts] * DISCOUNT
+    totals[:tax] = totals[:tax]
+  end
+
+  def e_price
+    totals[:e_price]
   end
 
   def grand_total
@@ -64,8 +67,8 @@ class BasketService
     totals[:tax]
   end
 
-  def discounts
-    totals[:discounts]
+  def v_refund
+    totals[:v_refund]
   end
 
   def tax_rates(item)
@@ -84,17 +87,9 @@ class BasketService
     dc == 2 && item == 1 ? ITEMS[item] - DISCOUNT : ITEMS[item] + tax_rates(item)
   end
 
-  def total_refund
-    total = totals[:g_total].to_i
-    total > 70 ? '%0.2f' % (total * REFUND).round(2) : 0.00
-  end
-
   private
 
   def vat_refund(total)
-    if total > 70
-      total = total - (total * REFUND)
-    end
-    total
+      total * REFUND
   end
 end
