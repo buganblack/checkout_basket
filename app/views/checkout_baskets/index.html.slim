@@ -1,0 +1,35 @@
+div class="basket header"
+  div class="constrain text-center"
+    h1 Checkout Basket
+
+  div class="constrain top-buffer"
+    div class="row text-right form-group"
+      div class="col-sm-4 col-sm-offset-3"
+        | Scotland Flag - £20.00
+        button type="button" class="btn btn-info button-style" id="flag"
+          | Add to Basket
+    div class="row text-right form-group"
+      div class="col-sm-4 col-sm-offset-3"
+        | Children's Car Seat - £33.90
+        button type="button" class="btn btn-info button-style" id="car"
+          | Add to Basket
+    div class="row text-right form-group"
+      div class="col-sm-4 col-sm-offset-3"
+        | Magnetic Wrist Band - £9.00
+        button type="button" class="btn btn-info button-style" id="band"
+          | Add to Basket
+    div class="row text-center form-group" style="margin-top:50px;"
+      | Total Items in basket:
+      label style="margin-left:20px;" id="totalItems"
+        | 0
+      br
+      | Subtotal:
+      label style="margin-left:20px;" id="subTotal"
+        | 0
+      br
+      = simple_form_for(:checkouts, url: orders_checkout_baskets_path, method: :get) do |f|
+        = f.hidden_field :orders, value: [], id: "orders"
+        = f.button :submit, "Proceed to Checkout", class: "btn btn-primary", id: "checkout", hidden: true
+
+- content_for :extra_javascripts do
+  = javascript_include_tag "checkout"

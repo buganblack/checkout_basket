@@ -1,0 +1,41 @@
+div class="basket header"
+  table class="table table-bordered table-condensed"
+    thead
+      tr
+        th Item
+        th Price
+        th Vat
+        th Total
+    tbody
+      - @items.each do |item|
+        - item = item.to_i
+        tr
+          td = h @basket.item_name(item)
+          td = h @basket.item_price(item)
+          td = h '%0.2f' % @basket.tax_rates(item).round(2)
+          td = h '%0.2f' % @basket.additional_rates(item, 0).round(2)
+      tr
+        td
+          h4 Sub Total
+        td colspan="3" class="text-center"
+          h5 = @basket.sub_total
+      tr
+        td
+          h4 VAT total
+        td colspan="3" class="text-center"
+          h5 = @basket.tax
+      tr
+        td
+          h4 Refund
+        td colspan="3" class="text-center"
+          h5 = @basket.total_refund
+      tr
+        td
+          h4 Discounts
+        td colspan="3" class="text-center"
+          h5 = @basket.discounts
+      tr
+        td
+          h4 Grand Total
+        td colspan="3" class="text-center"
+          h5 = @basket.grand_total
