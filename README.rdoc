@@ -1,5 +1,8 @@
 == README
 rails version (4.2.5.1)
+
 ruby version (2.1.0)
+
 no database use since problem given doesnt seem to need it
+
 rspec for test (rspec spec/services/basket_service.rb )
